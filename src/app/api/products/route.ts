@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function GET(req: NextRequest) {
   const supabase = createClient()
@@ -15,9 +16,13 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
+  // Auth check using anon client
   const supabase = createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
+
+  // Use service role to bypass RLS for insert
+  const admin = createAdminClient()
 
   const body = await req.json()
   const { name, category, brand, price, original_price, badge, image_url, storage_path, images_360, model_3d_url } = body
@@ -26,7 +31,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 422 })
   }
 
-  const { error } = await supabase.from('products').insert({
+  const { error } = await admin.from('products').insert({
     name,
     category,
     brand:          brand || null,
