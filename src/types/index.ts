@@ -12,6 +12,8 @@ export interface Product {
   storage_path: string
   whatsapp_msg: string
   badge: 'new' | 'premium' | 'sale' | null
+  images_360: string[] | null   // ordered array of URLs for 360° spinner
+  model_3d_url: string | null   // .glb URL for virtual try-on
   is_active: boolean
   created_at: string
 }

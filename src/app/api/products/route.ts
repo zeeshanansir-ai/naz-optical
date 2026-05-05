@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
 
   const body = await req.json()
-  const { name, category, brand, price, original_price, badge, image_url, storage_path } = body
+  const { name, category, brand, price, original_price, badge, image_url, storage_path, images_360, model_3d_url } = body
 
   if (!name || !category || !price || !image_url) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 422 })
@@ -35,6 +35,8 @@ export async function POST(req: NextRequest) {
     badge:          badge && badge !== 'none' ? badge : null,
     image_url,
     storage_path,
+    images_360:     images_360?.length > 0 ? images_360 : null,
+    model_3d_url:   model_3d_url || null,
   })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
