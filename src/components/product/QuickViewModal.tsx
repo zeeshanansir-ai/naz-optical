@@ -26,8 +26,8 @@ export function QuickViewModal({ product, open, onClose }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={v => { if (!v) { onClose(); setView('image') } }}>
-      <DialogContent className="max-w-2xl p-0 overflow-hidden">
-        <div className="grid grid-cols-1 sm:grid-cols-2">
+      <DialogContent className="max-w-3xl p-0 overflow-hidden">
+        <div className="grid grid-cols-1 sm:grid-cols-[3fr_2fr]">
           {/* Left — image or 360 viewer */}
           <div className="relative bg-gray-50">
             {has360 && (
