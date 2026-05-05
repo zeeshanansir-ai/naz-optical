@@ -113,8 +113,13 @@ export function QuickViewModal({ product, open, onClose }: Props) {
           )}
 
           <div className="flex flex-col gap-2 mt-auto pt-4 border-t border-gray-100">
-            {product.model_3d_url && (
+            {product.model_3d_url ? (
               <VirtualTryOn modelUrl={product.model_3d_url} productName={product.name} />
+            ) : (
+              <div className="flex items-center gap-2 border border-red-200 bg-red-50 text-red-700 text-xs font-semibold px-4 py-2.5 rounded-md">
+                <svg className="w-4 h-4 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                Virtual Try On — visit our store or WhatsApp us to try this frame
+              </div>
             )}
             <WhatsAppButton product={product} className="w-full" />
           </div>
