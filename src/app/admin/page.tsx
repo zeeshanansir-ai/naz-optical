@@ -1,9 +1,15 @@
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
 import { UploadPortal } from '@/components/admin/UploadPortal'
 import { SITE_NAME } from '@/lib/constants'
 
 export const metadata = { title: `Admin — ${SITE_NAME}` }
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const supabase = createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/admin/login')
+
   return (
     <div className="min-h-screen bg-gray-50 px-4 py-10">
       <div className="max-w-2xl mx-auto space-y-8">
