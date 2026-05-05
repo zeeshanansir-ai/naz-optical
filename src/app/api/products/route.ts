@@ -1,13 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
 import { createAdminClient } from '@/lib/supabase/admin'
 
 export async function GET(req: NextRequest) {
-  const supabase = createClient()
+  const admin = createAdminClient()
   const { searchParams } = new URL(req.url)
   const category = searchParams.get('category')
 
-  let query = supabase.from('products').select('*').eq('is_active', true).order('created_at', { ascending: false })
+  let query = admin.from('products').select('*').eq('is_active', true).order('created_at', { ascending: false })
   if (category && category !== 'all') query = query.eq('category', category)
 
   const { data, error } = await query
@@ -16,15 +15,12 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  // Auth check using anon client
-  const supabase = createClient()
-  const { data: { user } } = await supabase.auth.getUser()
-  if (!user) return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
+  if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+    return NextResponse.json({ error: 'SUPABASE_SERVICE_ROLE_KEY not set in environment variables' }, { status: 500 })
+  }
 
-  // Use service role to bypass RLS for insert
   const admin = createAdminClient()
-
-  const body = await req.json()
+  const body  = await req.json()
   const { name, category, brand, price, original_price, badge, image_url, storage_path, images_360, model_3d_url } = body
 
   if (!name || !category || !price || !image_url) {
