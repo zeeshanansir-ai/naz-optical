@@ -1,60 +1,49 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Button } from '@/components/ui/button'
-import { SITE_NAME, SITE_TAGLINE } from '@/lib/constants'
 
 export function HeroSection({ onShopNow }: { onShopNow?: () => void }) {
   return (
-    <section className="relative bg-optical-navy text-white overflow-hidden">
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-10 bg-[radial-gradient(circle_at_top_right,_#c9a84c_0%,_transparent_60%)]" />
+    <section className="relative bg-[#2d4a1e] text-white overflow-hidden min-h-[360px] sm:min-h-[440px] flex items-center">
+      {/* Background gradient overlay */}
+      <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/30 to-transparent z-10" />
 
-      <div className="relative max-w-7xl mx-auto px-4 py-24 sm:py-32 flex flex-col items-center text-center gap-6">
-        <motion.p
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="text-optical-gold text-sm font-semibold uppercase tracking-widest"
-        >
-          {SITE_NAME}
-        </motion.p>
+      {/* Decorative circle */}
+      <div className="absolute right-10 top-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-optical-gold/20 blur-3xl" />
 
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="text-4xl sm:text-6xl font-bold leading-tight max-w-3xl"
-        >
-          {SITE_TAGLINE}
-        </motion.h1>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-white/70 text-lg max-w-xl"
-        >
-          Discover our curated collection of frames — from classic elegance to modern bold. Every pair crafted for clarity, comfort, and style.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="flex gap-3 flex-wrap justify-center"
-        >
-          <Button
-            size="lg"
-            className="bg-optical-gold hover:bg-optical-gold/90 text-optical-navy font-semibold"
-            onClick={onShopNow}
+      <div className="relative z-20 max-w-7xl mx-auto px-6 py-16 sm:py-20 w-full">
+        <div className="max-w-xl space-y-5">
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.1 }}
           >
-            Shop Collection
-          </Button>
-          <Button size="lg" variant="outline" className="border-white/40 text-white hover:bg-white/10">
-            Learn More
-          </Button>
-        </motion.div>
+            <span className="inline-block bg-red-600 text-white text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full mb-3">
+              Limited Offer
+            </span>
+            <h1 className="text-4xl sm:text-5xl font-extrabold leading-tight">
+              Premium Glasses<br />
+              <span className="text-optical-gold">Flat 15% Off</span>
+            </h1>
+            <p className="text-white/70 mt-2 text-base">discount at checkout on all orders</p>
+          </motion.div>
+
+          <motion.button
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            onClick={onShopNow}
+            className="inline-flex items-center bg-red-600 hover:bg-red-700 text-white font-bold px-8 py-3 rounded-full text-sm transition-colors"
+          >
+            Shop Now
+          </motion.button>
+        </div>
+      </div>
+
+      {/* Dots pagination */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+        <span className="w-2 h-2 rounded-full bg-white" />
+        <span className="w-2 h-2 rounded-full bg-white/40" />
       </div>
     </section>
   )

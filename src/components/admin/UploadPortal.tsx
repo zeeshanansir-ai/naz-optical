@@ -11,14 +11,17 @@ import { CATEGORIES } from '@/lib/constants'
 import { Category } from '@/types'
 
 interface FormState {
-  name:         string
-  category:     Category | ''
-  price:        string
-  image_url:    string
-  storage_path: string
+  name:           string
+  category:       Category | ''
+  brand:          string
+  price:          string
+  original_price: string
+  badge:          'new' | 'premium' | 'sale' | ''
+  image_url:      string
+  storage_path:   string
 }
 
-const INIT: FormState = { name: '', category: '', price: '', image_url: '', storage_path: '' }
+const INIT: FormState = { name: '', category: '', brand: '', price: '', original_price: '', badge: '', image_url: '', storage_path: '' }
 
 export function UploadPortal() {
   const [form, setForm]     = useState<FormState>(INIT)
@@ -68,31 +71,39 @@ export function UploadPortal() {
       <div className="grid grid-cols-2 gap-4">
         <div className="space-y-1.5">
           <Label>Category</Label>
-          <Select
-            value={form.category}
-            onValueChange={v => setForm(f => ({ ...f, category: v as Category }))}
-            required
-          >
+          <Select value={form.category} onValueChange={v => setForm(f => ({ ...f, category: v as Category }))} required>
             <SelectTrigger><SelectValue placeholder="Select…" /></SelectTrigger>
             <SelectContent>
-              {CATEGORIES.map(c => (
-                <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>
-              ))}
+              {CATEGORIES.map(c => <SelectItem key={c.value} value={c.value}>{c.label}</SelectItem>)}
             </SelectContent>
           </Select>
         </div>
-
         <div className="space-y-1.5">
+          <Label htmlFor="brand">Brand (optional)</Label>
+          <Input id="brand" placeholder="e.g. Ray Ban" value={form.brand} onChange={e => setForm(f => ({ ...f, brand: e.target.value }))} />
+        </div>
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="space-y-1.5 col-span-1">
           <Label htmlFor="price">Price (Rs.)</Label>
-          <Input
-            id="price"
-            type="number"
-            min={0}
-            placeholder="2500"
-            value={form.price}
-            onChange={e => setForm(f => ({ ...f, price: e.target.value }))}
-            required
-          />
+          <Input id="price" type="number" min={0} placeholder="2500" value={form.price} onChange={e => setForm(f => ({ ...f, price: e.target.value }))} required />
+        </div>
+        <div className="space-y-1.5 col-span-1">
+          <Label htmlFor="original_price">Original Price</Label>
+          <Input id="original_price" type="number" min={0} placeholder="3500" value={form.original_price} onChange={e => setForm(f => ({ ...f, original_price: e.target.value }))} />
+        </div>
+        <div className="space-y-1.5 col-span-1">
+          <Label>Badge</Label>
+          <Select value={form.badge} onValueChange={v => setForm(f => ({ ...f, badge: v as 'new' | 'premium' | 'sale' | '' }))}>
+            <SelectTrigger><SelectValue placeholder="None" /></SelectTrigger>
+            <SelectContent>
+              <SelectItem value="none">None</SelectItem>
+              <SelectItem value="new">New</SelectItem>
+              <SelectItem value="premium">Premium</SelectItem>
+              <SelectItem value="sale">Sale</SelectItem>
+            </SelectContent>
+          </Select>
         </div>
       </div>
 

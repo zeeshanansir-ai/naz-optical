@@ -3,10 +3,13 @@
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Eye } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { CATEGORIES } from '@/lib/constants'
 import { Product } from '@/types'
+
+const BADGE_STYLES: Record<string, string> = {
+  new:     'bg-green-500 text-white',
+  premium: 'bg-optical-navy text-white',
+  sale:    'bg-red-600 text-white',
+}
 
 interface Props {
   product: Product
@@ -14,7 +17,9 @@ interface Props {
 }
 
 export function ProductCard({ product, onQuickView }: Props) {
-  const categoryLabel = CATEGORIES.find(c => c.value === product.category)?.label ?? product.category
+  const discount = product.original_price
+    ? Math.round(((product.original_price - product.price) / product.original_price) * 100)
+    : null
 
   return (
     <motion.div
@@ -31,24 +36,40 @@ export function ProductCard({ product, onQuickView }: Props) {
           className="object-cover transition-transform duration-500 group-hover:scale-105"
           sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
         />
+
+        {/* Badge */}
+        {product.badge && (
+          <span className={`absolute top-2 left-2 text-xs font-bold px-2 py-0.5 rounded-full capitalize ${BADGE_STYLES[product.badge] ?? 'bg-gray-200'}`}>
+            {product.badge}
+          </span>
+        )}
+        {discount && (
+          <span className="absolute top-2 right-2 text-xs font-bold bg-red-600 text-white px-2 py-0.5 rounded-full">
+            -{discount}%
+          </span>
+        )}
+
         {/* Hover overlay */}
         <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="gap-2"
+          <button
+            className="flex items-center gap-1.5 bg-white text-gray-900 text-xs font-semibold px-4 py-2 rounded-full hover:bg-optical-gold hover:text-white transition-colors"
             onClick={() => onQuickView(product)}
           >
-            <Eye className="w-4 h-4" />
+            <Eye className="w-3.5 h-3.5" />
             Quick View
-          </Button>
+          </button>
         </div>
       </div>
 
       <div className="p-3 space-y-1">
-        <Badge variant="outline" className="text-xs capitalize">{categoryLabel}</Badge>
-        <h3 className="font-medium text-sm leading-snug line-clamp-2">{product.name}</h3>
-        <p className="text-optical-gold font-bold text-sm">Rs. {product.price.toLocaleString()}</p>
+        {product.brand && <p className="text-xs text-optical-gold font-semibold uppercase tracking-wide">{product.brand}</p>}
+        <h3 className="font-medium text-sm leading-snug line-clamp-2 text-gray-800">{product.name}</h3>
+        <div className="flex items-center gap-2">
+          <p className="text-optical-navy font-bold text-sm">Rs. {product.price.toLocaleString()}</p>
+          {product.original_price && (
+            <p className="text-gray-400 text-xs line-through">Rs. {product.original_price.toLocaleString()}</p>
+          )}
+        </div>
       </div>
     </motion.div>
   )

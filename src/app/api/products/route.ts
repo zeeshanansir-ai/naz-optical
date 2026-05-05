@@ -20,7 +20,7 @@ export async function POST(req: NextRequest) {
   if (!user) return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
 
   const body = await req.json()
-  const { name, category, price, image_url, storage_path } = body
+  const { name, category, brand, price, original_price, badge, image_url, storage_path } = body
 
   if (!name || !category || !price || !image_url) {
     return NextResponse.json({ error: 'Missing required fields' }, { status: 422 })
@@ -29,7 +29,10 @@ export async function POST(req: NextRequest) {
   const { error } = await supabase.from('products').insert({
     name,
     category,
-    price:        Number(price),
+    brand:          brand || null,
+    price:          Number(price),
+    original_price: original_price ? Number(original_price) : null,
+    badge:          badge && badge !== 'none' ? badge : null,
     image_url,
     storage_path,
   })
