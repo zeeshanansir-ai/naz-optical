@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import { motion } from 'framer-motion'
-import { Eye } from 'lucide-react'
+import { Eye, Camera } from 'lucide-react'
 import { Product } from '@/types'
 
 const BADGE_STYLES: Record<string, string> = {
@@ -47,6 +47,18 @@ export function ProductCard({ product, onQuickView }: Props) {
           <span className="absolute top-2 right-2 text-xs font-bold bg-red-600 text-white px-2 py-0.5 rounded-full">
             -{discount}%
           </span>
+        )}
+
+        {/* Try On badge */}
+        {product.model_3d_url && (
+          <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-optical-navy text-white text-xs font-semibold px-2 py-0.5 rounded-full z-10">
+            <Camera className="w-3 h-3" /> Try On
+          </div>
+        )}
+
+        {/* 360° badge */}
+        {product.images_360 && product.images_360.length > 1 && (
+          <div className="absolute bottom-2 right-2 bg-white/90 text-gray-700 text-xs font-bold px-2 py-0.5 rounded-full z-10">360°</div>
         )}
 
         {/* Hover overlay */}

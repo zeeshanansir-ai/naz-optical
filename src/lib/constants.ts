@@ -1,11 +1,12 @@
 import { Category } from '@/types'
 
 export const CATEGORIES: { value: Category; label: string }[] = [
-  { value: 'men',        label: 'Men'               },
-  { value: 'women',      label: 'Women'             },
-  { value: 'kids',       label: 'Kids'              },
+  { value: 'men',        label: 'Men Glasses'       },
+  { value: 'women',      label: 'Women Glasses'     },
+  { value: 'kids',       label: 'Kids Glasses'      },
   { value: 'sunglasses', label: 'Sunglasses'        },
   { value: 'computer',   label: 'Computer Glasses'  },
+  { value: 'contact',    label: 'Contact Lenses'    },
 ]
 
 export const WHATSAPP_NUMBER  = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? '923004686170'

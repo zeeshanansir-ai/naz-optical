@@ -77,10 +77,24 @@ function HomeContent() {
               loading={loading}
             />
             <ProductSection
+              title="Kids Glasses"
+              subtitle="Durable & Fun Frames · Safe for Children · Flexible Material"
+              products={byCategory['kids'] ?? []}
+              category="kids"
+              loading={loading}
+            />
+            <ProductSection
               title="Computer & Blue Light Glasses"
               subtitle="UV Protected · Greatest Tinted · Relaxed Filters"
               products={byCategory['computer'] ?? []}
               category="computer"
+              loading={loading}
+            />
+            <ProductSection
+              title="Contact Lenses"
+              subtitle="Bella · Biomedics · Acuvue · Colored & Transparent"
+              products={byCategory['contact'] ?? []}
+              category="contact"
               loading={loading}
             />
             <BrandScroll />

@@ -2,10 +2,26 @@ import Link from 'next/link'
 import { Glasses, MessageCircle, MapPin } from 'lucide-react'
 import { SITE_NAME, WHATSAPP_NUMBER, WHATSAPP_NUMBER2, ESTABLISHED, SOCIAL, LOCATIONS } from '@/lib/constants'
 
-const LINKS = {
-  'Eyeglasses': ['Men Glasses', 'Women Glasses', 'Kids Glasses', 'Premium Glasses', 'Computer Glasses'],
-  'Sunglasses': ['Men Sunglasses', 'Women Sunglasses', 'Polarized', 'Premium Sunglasses'],
-  'Help':       ['About Us', 'Reviews', 'Exchange Policy', 'Track Order'],
+const LINKS: Record<string, { label: string; href: string }[]> = {
+  'Eyeglasses': [
+    { label: 'Men Glasses',      href: '/?category=men'        },
+    { label: 'Women Glasses',    href: '/?category=women'      },
+    { label: 'Kids Glasses',     href: '/?category=kids'       },
+    { label: 'Computer Glasses', href: '/?category=computer'   },
+    { label: 'Contact Lenses',   href: '/?category=contact'    },
+  ],
+  'Sunglasses': [
+    { label: 'Men Sunglasses',     href: '/?category=sunglasses' },
+    { label: 'Women Sunglasses',   href: '/?category=sunglasses' },
+    { label: 'Polarized',          href: '/?category=sunglasses' },
+    { label: 'Premium Sunglasses', href: '/?category=sunglasses' },
+  ],
+  'Help': [
+    { label: 'About Us',        href: '/reviews'  },
+    { label: 'Reviews',         href: '/reviews'  },
+    { label: 'Exchange Policy', href: '/reviews'  },
+    { label: 'WhatsApp Us',     href: `https://wa.me/${WHATSAPP_NUMBER}` },
+  ],
 }
 
 export function Footer() {
@@ -60,8 +76,8 @@ export function Footer() {
               <p className="text-white font-semibold text-sm mb-3">{heading}</p>
               <ul className="space-y-2">
                 {items.map(item => (
-                  <li key={item}>
-                    <Link href="/" className="text-sm hover:text-white transition-colors">{item}</Link>
+                  <li key={item.label}>
+                    <Link href={item.href} className="text-sm hover:text-white transition-colors">{item.label}</Link>
                   </li>
                 ))}
               </ul>
