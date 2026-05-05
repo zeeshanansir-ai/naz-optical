@@ -5,7 +5,7 @@ import { WHATSAPP_NUMBER, WHATSAPP_NUMBER2 } from '@/lib/constants'
 import { Product } from '@/types'
 
 export function WhatsAppButton({ product, className }: { product: Product; className?: string }) {
-  const msg = encodeURIComponent(product.whatsapp_msg)
+  const msg = encodeURIComponent(product.whatsapp_msg || `Hi, I'm interested in ${product.name}`)
   return (
     <div className={`flex gap-2 ${className ?? ''}`}>
       <a
