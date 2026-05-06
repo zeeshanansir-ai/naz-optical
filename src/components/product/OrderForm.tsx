@@ -19,24 +19,22 @@ export function OrderForm({ product, open, onClose }: Props) {
 
   if (!open) return null
 
-  function buildMessage(number: string) {
+  function buildUrl(number: string) {
     const lines = [
-      `🛍️ *New Order Inquiry — Naz Optical Service*`,
+      `New Order Inquiry - Naz Optical Service`,
       ``,
-      `*Product:* ${product.name}`,
-      product.brand ? `*Brand:* ${product.brand}` : null,
-      `*Price:* Rs. ${product.price.toLocaleString()}`,
+      `Product: ${product.name}`,
+      product.brand ? `Brand: ${product.brand}` : null,
+      `Price: Rs. ${product.price.toLocaleString()}`,
       ``,
-      `*Customer Details:*`,
-      `👤 Name: ${name}`,
-      `📞 Phone: ${phone}`,
-      email ? `📧 Email: ${email}` : null,
-      message ? `💬 Message: ${message}` : null,
+      `Customer Details:`,
+      `Name: ${name}`,
+      `Phone: ${phone}`,
+      email ? `Email: ${email}` : null,
+      message ? `Message: ${message}` : null,
     ].filter(Boolean).join('\n')
 
-    const url = `https://wa.me/${number}?text=${encodeURIComponent(lines)}`
-    window.open(url, '_blank')
-    onClose()
+    return `https://wa.me/${number}?text=${encodeURIComponent(lines)}`
   }
 
   return (
@@ -120,24 +118,43 @@ export function OrderForm({ product, open, onClose }: Props) {
         <div className="px-6 pb-5 space-y-2">
           <p className="text-xs text-gray-400 text-center mb-3">Choose which number to send your inquiry to:</p>
           <div className="grid grid-cols-2 gap-2">
-            <button
-              disabled={!name || !phone}
-              onClick={() => buildMessage(WHATSAPP_NUMBER)}
-              className="flex items-center justify-center gap-1.5 bg-green-500 hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold py-2.5 rounded-xl transition-colors"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              0300-4686170
-            </button>
-            <button
-              disabled={!name || !phone}
-              onClick={() => buildMessage(WHATSAPP_NUMBER2)}
-              className="flex items-center justify-center gap-1.5 bg-green-500 hover:bg-green-600 disabled:opacity-40 disabled:cursor-not-allowed text-white text-xs font-bold py-2.5 rounded-xl transition-colors"
-            >
-              <MessageCircle className="w-3.5 h-3.5" />
-              0327-1830170
-            </button>
+            {name && phone ? (
+              <>
+                <a
+                  href={buildUrl(WHATSAPP_NUMBER)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onClose}
+                  className="flex items-center justify-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-2.5 rounded-xl transition-colors"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  0300-4686170
+                </a>
+                <a
+                  href={buildUrl(WHATSAPP_NUMBER2)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={onClose}
+                  className="flex items-center justify-center gap-1.5 bg-green-500 hover:bg-green-600 text-white text-xs font-bold py-2.5 rounded-xl transition-colors"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  0327-1830170
+                </a>
+              </>
+            ) : (
+              <>
+                <div className="flex items-center justify-center gap-1.5 bg-green-200 text-white text-xs font-bold py-2.5 rounded-xl cursor-not-allowed">
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  0300-4686170
+                </div>
+                <div className="flex items-center justify-center gap-1.5 bg-green-200 text-white text-xs font-bold py-2.5 rounded-xl cursor-not-allowed">
+                  <MessageCircle className="w-3.5 h-3.5" />
+                  0327-1830170
+                </div>
+              </>
+            )}
           </div>
-          <p className="text-xs text-gray-400 text-center mt-1">Name and phone are required</p>
+          {(!name || !phone) && <p className="text-xs text-red-400 text-center mt-1">Please fill in name and phone to continue</p>}
         </div>
       </div>
     </div>
