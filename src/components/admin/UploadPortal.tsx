@@ -145,7 +145,11 @@ export function UploadPortal({ editProduct, onSaved, onCancelEdit }: Props) {
         {isEditing && form.image_url && (
           <p className="text-xs text-gray-400">Current image kept unless you upload a new one</p>
         )}
-        <ImageUploader onUploaded={(url, path) => setForm(f => ({ ...f, image_url: url, storage_path: path }))} />
+        <ImageUploader
+          key={editProduct?.id ?? 'new'}
+          onUploaded={(url, path) => setForm(f => ({ ...f, image_url: url, storage_path: path }))}
+          currentUrl={isEditing ? form.image_url : undefined}
+        />
         {isEditing && form.image_url && !form.storage_path.startsWith('products/') && (
           <p className="text-xs text-green-600">✓ Using existing image</p>
         )}

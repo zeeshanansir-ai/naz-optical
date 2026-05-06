@@ -6,9 +6,10 @@ import { createClient } from '@/lib/supabase/client'
 
 interface Props {
   onUploaded: (url: string, path: string) => void
+  currentUrl?: string
 }
 
-export function ImageUploader({ onUploaded }: Props) {
+export function ImageUploader({ onUploaded, currentUrl }: Props) {
   const inputRef          = useRef<HTMLInputElement>(null)
   const [preview, setPreview]     = useState<string | null>(null)
   const [uploading, setUploading] = useState(false)
@@ -47,14 +48,14 @@ export function ImageUploader({ onUploaded }: Props) {
         className="hidden"
         onChange={e => { const f = e.target.files?.[0]; if (f) handleFile(f) }}
       />
-      {preview ? (
+      {preview || currentUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
-        <img src={preview} alt="Preview" className="w-32 h-32 object-cover rounded-lg" />
+        <img src={preview ?? currentUrl!} alt="Preview" className="w-40 h-40 object-contain rounded-lg bg-gray-50 border border-gray-100 p-2" />
       ) : (
         <Upload className="w-8 h-8 text-muted-foreground" />
       )}
       <p className="text-sm text-muted-foreground text-center">
-        {uploading ? 'Uploading…' : 'Click or drag & drop an image'}
+        {uploading ? 'Uploading…' : preview ? 'Click to change image' : currentUrl ? 'Click to replace image' : 'Click or drag & drop an image'}
       </p>
       {error && <p className="text-xs text-red-500">{error}</p>}
     </div>
