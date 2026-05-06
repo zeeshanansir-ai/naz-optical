@@ -5,9 +5,9 @@ import { createClient } from '@/lib/supabase/client'
 import { Category, Product, SortOption } from '@/types'
 import { useDebounce } from './useDebounce'
 
-export function useProducts(initialCategory?: Category | 'all') {
+export function useProducts(initialCategory?: Category | 'all', initialSearch?: string) {
   const [all, setAll]           = useState<Product[]>([])
-  const [search, setSearch]     = useState('')
+  const [search, setSearch]     = useState(initialSearch ?? '')
   const [category, setCategory] = useState<Category | 'all'>(initialCategory ?? 'all')
   const [sort, setSort]         = useState<SortOption>('newest')
   const [loading, setLoading]   = useState(true)

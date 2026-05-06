@@ -2,7 +2,7 @@ import Link from 'next/link'
 import { Glasses, MessageCircle, MapPin } from 'lucide-react'
 import { SITE_NAME, WHATSAPP_NUMBER, WHATSAPP_NUMBER2, ESTABLISHED, SOCIAL, LOCATIONS } from '@/lib/constants'
 
-const LINKS: Record<string, { label: string; href: string }[]> = {
+const LINKS: Record<string, { label: string; href: string; external?: boolean }[]> = {
   'Eyeglasses': [
     { label: 'Men Glasses',      href: '/?category=men'        },
     { label: 'Women Glasses',    href: '/?category=women'      },
@@ -20,7 +20,7 @@ const LINKS: Record<string, { label: string; href: string }[]> = {
     { label: 'About Us',        href: '/about'           },
     { label: 'Reviews',         href: '/reviews'         },
     { label: 'Exchange Policy', href: '/exchange-policy' },
-    { label: 'WhatsApp Us',     href: `https://wa.me/${WHATSAPP_NUMBER}` },
+    { label: 'WhatsApp Us',     href: `https://wa.me/${WHATSAPP_NUMBER}`, external: true },
   ],
 }
 
@@ -77,7 +77,11 @@ export function Footer() {
               <ul className="space-y-2">
                 {items.map(item => (
                   <li key={item.label}>
-                    <Link href={item.href} className="text-sm hover:text-white transition-colors">{item.label}</Link>
+                    {item.external ? (
+                      <a href={item.href} target="_blank" rel="noopener noreferrer" className="text-sm hover:text-white transition-colors">{item.label}</a>
+                    ) : (
+                      <Link href={item.href} className="text-sm hover:text-white transition-colors">{item.label}</Link>
+                    )}
                   </li>
                 ))}
               </ul>

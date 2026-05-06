@@ -25,7 +25,7 @@ function HomeContent() {
     search, setSearch,
     category, setCategory,
     sort, setSort,
-  } = useProducts(urlCategory ?? 'all')
+  } = useProducts(urlCategory ?? 'all', urlSearch || undefined)
 
   // If a filter is active show grid view, else show homepage sections
   const isFiltered = category !== 'all' || search.trim().length > 0 || !!urlSearch

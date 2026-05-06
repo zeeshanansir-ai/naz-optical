@@ -220,23 +220,6 @@ export function UploadPortal({ editProduct, onSaved, onCancelEdit }: Props) {
         )}
       </div>
 
-      {/* 3D model */}
-      <div className="space-y-2 border border-dashed border-gray-200 rounded-xl p-4">
-        <Label className="flex items-center gap-2 text-sm font-semibold">
-          3D Model for Try-On
-          <span className="text-xs font-normal text-gray-400">(optional — .glb file)</span>
-        </Label>
-        <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 hover:text-optical-navy">
-          <Upload className="w-4 h-4" />
-          {uploadingModel ? 'Uploading…' : form.model_3d_url ? 'Model uploaded ✓' : 'Select .glb file'}
-          <input type="file" accept=".glb,.gltf" className="hidden" onChange={e => e.target.files?.[0] && uploadModel(e.target.files[0])} />
-        </label>
-        {form.model_3d_url && (
-          <button type="button" onClick={() => setForm(f => ({ ...f, model_3d_url: '' }))} className="text-xs text-red-500 flex items-center gap-1">
-            <X className="w-3 h-3" /> Remove model
-          </button>
-        )}
-      </div>
 
       {error   && <p className="text-sm text-red-500">{error}</p>}
       {success && (

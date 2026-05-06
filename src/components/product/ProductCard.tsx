@@ -51,17 +51,6 @@ export function ProductCard({ product, onQuickView }: Props) {
           </span>
         )}
 
-        {/* Try On button — always visible on hover, ainak.pk style */}
-        <div className="absolute top-2 left-1/2 -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 z-10">
-          <div className="flex items-center gap-1.5 bg-red-600 text-white text-xs font-bold px-3 py-1.5 rounded">
-            <svg className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-            Try on
-          </div>
-        </div>
-
         {/* 360° badge */}
         {product.images_360 && product.images_360.length > 1 && (
           <div className="absolute bottom-2 right-2 bg-optical-navy text-white text-xs font-bold px-2 py-0.5 rounded z-10">360°</div>
