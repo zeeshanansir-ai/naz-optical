@@ -17,9 +17,9 @@ const LINKS: Record<string, { label: string; href: string }[]> = {
     { label: 'Premium Sunglasses', href: '/?category=sunglasses' },
   ],
   'Help': [
-    { label: 'About Us',        href: '/reviews'  },
-    { label: 'Reviews',         href: '/reviews'  },
-    { label: 'Exchange Policy', href: '/reviews'  },
+    { label: 'About Us',        href: '/about'           },
+    { label: 'Reviews',         href: '/reviews'         },
+    { label: 'Exchange Policy', href: '/exchange-policy' },
     { label: 'WhatsApp Us',     href: `https://wa.me/${WHATSAPP_NUMBER}` },
   ],
 }
