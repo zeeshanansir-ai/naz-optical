@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { CheckCircle, X, Upload } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -9,7 +9,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { ImageUploader } from './ImageUploader'
 import { createClient } from '@/lib/supabase/client'
 import { CATEGORIES } from '@/lib/constants'
-import { Category } from '@/types'
+import { Category, Product } from '@/types'
 
 interface FormState {
   name:           string
@@ -29,7 +29,13 @@ const INIT: FormState = {
   badge: '', image_url: '', storage_path: '', images_360: [], model_3d_url: '',
 }
 
-export function UploadPortal() {
+interface Props {
+  editProduct?: Product | null
+  onSaved?: () => void
+  onCancelEdit?: () => void
+}
+
+export function UploadPortal({ editProduct, onSaved, onCancelEdit }: Props) {
   const [form, setForm]           = useState<FormState>(INIT)
   const [saving, setSaving]       = useState(false)
   const [success, setSuccess]     = useState(false)
@@ -37,19 +43,39 @@ export function UploadPortal() {
   const [uploading360, set360]    = useState(false)
   const [uploadingModel, setModel]= useState(false)
 
+  // Pre-fill form when editing
+  useEffect(() => {
+    if (editProduct) {
+      setForm({
+        name:           editProduct.name,
+        category:       editProduct.category,
+        brand:          editProduct.brand ?? '',
+        price:          String(editProduct.price),
+        original_price: editProduct.original_price ? String(editProduct.original_price) : '',
+        badge:          editProduct.badge ?? '',
+        image_url:      editProduct.image_url,
+        storage_path:   editProduct.storage_path,
+        images_360:     editProduct.images_360 ?? [],
+        model_3d_url:   editProduct.model_3d_url ?? '',
+      })
+      setSuccess(false)
+      setError(null)
+    } else {
+      setForm(INIT)
+    }
+  }, [editProduct])
+
   async function upload360(files: FileList) {
     set360(true)
     const supabase = createClient()
     const urls: string[] = []
     const sorted = Array.from(files).sort((a, b) => a.name.localeCompare(b.name))
-
     for (const file of sorted) {
       const path = `360/${crypto.randomUUID()}_${file.name}`
       await supabase.storage.from('product-images').upload(path, file, { cacheControl: '3600' })
       const { data } = supabase.storage.from('product-images').getPublicUrl(path)
       urls.push(data.publicUrl)
     }
-
     setForm(f => ({ ...f, images_360: urls }))
     set360(false)
   }
@@ -69,15 +95,23 @@ export function UploadPortal() {
     if (!form.image_url) { setError('Please upload a main image first'); return }
     setSaving(true); setError(null)
 
-    const res = await fetch('/api/products', {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body:    JSON.stringify({
-        ...form,
-        images_360:   form.images_360.length > 0 ? form.images_360 : null,
-        model_3d_url: form.model_3d_url || null,
-      }),
-    })
+    const payload = {
+      ...form,
+      images_360:   form.images_360.length > 0 ? form.images_360 : null,
+      model_3d_url: form.model_3d_url || null,
+    }
+
+    const res = editProduct
+      ? await fetch(`/api/products/${editProduct.id}`, {
+          method:  'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload),
+        })
+      : await fetch('/api/products', {
+          method:  'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body:    JSON.stringify(payload),
+        })
 
     if (!res.ok) {
       const { error: msg } = await res.json()
@@ -86,17 +120,35 @@ export function UploadPortal() {
       setSuccess(true)
       setForm(INIT)
       setTimeout(() => setSuccess(false), 3000)
+      onSaved?.()
     }
     setSaving(false)
   }
 
+  const isEditing = !!editProduct
+
   return (
     <form onSubmit={handleSubmit} className="space-y-6 max-w-lg">
+
+      {isEditing && (
+        <div className="flex items-center justify-between bg-blue-50 border border-blue-200 rounded-lg px-4 py-2.5">
+          <p className="text-sm font-semibold text-blue-700">Editing: {editProduct.name}</p>
+          <button type="button" onClick={onCancelEdit} className="text-blue-500 hover:text-blue-700">
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Main image */}
       <div className="space-y-1.5">
         <Label>Main Product Image *</Label>
+        {isEditing && form.image_url && (
+          <p className="text-xs text-gray-400">Current image kept unless you upload a new one</p>
+        )}
         <ImageUploader onUploaded={(url, path) => setForm(f => ({ ...f, image_url: url, storage_path: path }))} />
+        {isEditing && form.image_url && !form.storage_path.startsWith('products/') && (
+          <p className="text-xs text-green-600">✓ Using existing image</p>
+        )}
       </div>
 
       {/* Product name */}
@@ -134,7 +186,7 @@ export function UploadPortal() {
         </div>
         <div className="space-y-1.5">
           <Label>Badge</Label>
-          <Select value={form.badge} onValueChange={v => setForm(f => ({ ...f, badge: v as 'new' | 'premium' | 'sale' | '' }))}>
+          <Select value={form.badge || 'none'} onValueChange={v => setForm(f => ({ ...f, badge: v === 'none' ? '' : v as 'new' | 'premium' | 'sale' }))}>
             <SelectTrigger><SelectValue placeholder="None" /></SelectTrigger>
             <SelectContent>
               <SelectItem value="none">None</SelectItem>
@@ -155,13 +207,7 @@ export function UploadPortal() {
         <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 hover:text-optical-navy">
           <Upload className="w-4 h-4" />
           {uploading360 ? 'Uploading…' : form.images_360.length > 0 ? `${form.images_360.length} frames uploaded ✓` : 'Select all frame images at once'}
-          <input
-            type="file"
-            accept="image/*"
-            multiple
-            className="hidden"
-            onChange={e => e.target.files && upload360(e.target.files)}
-          />
+          <input type="file" accept="image/*" multiple className="hidden" onChange={e => e.target.files && upload360(e.target.files)} />
         </label>
         {form.images_360.length > 0 && (
           <button type="button" onClick={() => setForm(f => ({ ...f, images_360: [] }))} className="text-xs text-red-500 flex items-center gap-1">
@@ -179,12 +225,7 @@ export function UploadPortal() {
         <label className="flex items-center gap-2 cursor-pointer text-sm text-gray-600 hover:text-optical-navy">
           <Upload className="w-4 h-4" />
           {uploadingModel ? 'Uploading…' : form.model_3d_url ? 'Model uploaded ✓' : 'Select .glb file'}
-          <input
-            type="file"
-            accept=".glb,.gltf"
-            className="hidden"
-            onChange={e => e.target.files?.[0] && uploadModel(e.target.files[0])}
-          />
+          <input type="file" accept=".glb,.gltf" className="hidden" onChange={e => e.target.files?.[0] && uploadModel(e.target.files[0])} />
         </label>
         {form.model_3d_url && (
           <button type="button" onClick={() => setForm(f => ({ ...f, model_3d_url: '' }))} className="text-xs text-red-500 flex items-center gap-1">
@@ -196,13 +237,20 @@ export function UploadPortal() {
       {error   && <p className="text-sm text-red-500">{error}</p>}
       {success && (
         <p className="text-sm text-green-600 flex items-center gap-1.5">
-          <CheckCircle className="w-4 h-4" /> Product saved successfully!
+          <CheckCircle className="w-4 h-4" /> Product {isEditing ? 'updated' : 'saved'} successfully!
         </p>
       )}
 
-      <Button type="submit" disabled={saving} className="w-full bg-optical-navy hover:bg-optical-navy/90">
-        {saving ? 'Saving…' : 'Save Product'}
-      </Button>
+      <div className="flex gap-3">
+        {isEditing && (
+          <Button type="button" variant="outline" onClick={onCancelEdit} className="flex-1">
+            Cancel
+          </Button>
+        )}
+        <Button type="submit" disabled={saving} className="flex-1 bg-optical-navy hover:bg-optical-navy/90">
+          {saving ? 'Saving…' : isEditing ? 'Update Product' : 'Save Product'}
+        </Button>
+      </div>
     </form>
   )
 }
