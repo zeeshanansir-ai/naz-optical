@@ -6,6 +6,7 @@ import { X } from 'lucide-react'
 import { WhatsAppButton } from './WhatsAppButton'
 import { Viewer360 } from './Viewer360'
 import { VirtualTryOn } from './VirtualTryOn'
+import { LiveViewers } from './LiveViewers'
 import { CATEGORIES } from '@/lib/constants'
 import { Product } from '@/types'
 
@@ -113,6 +114,7 @@ export function QuickViewModal({ product, open, onClose }: Props) {
           )}
 
           <div className="flex flex-col gap-2 mt-auto pt-4 border-t border-gray-100">
+            <LiveViewers productId={product.id} />
             {product.model_3d_url ? (
               <VirtualTryOn modelUrl={product.model_3d_url} productName={product.name} />
             ) : (
