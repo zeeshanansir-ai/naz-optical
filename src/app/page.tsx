@@ -1,6 +1,6 @@
 'use client'
 
-import { Suspense, useRef } from 'react'
+import { Suspense, useRef, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { HeroSection } from '@/components/home/HeroSection'
 import { TrustBar } from '@/components/home/TrustBar'
@@ -27,7 +27,10 @@ function HomeContent() {
     sort, setSort,
   } = useProducts(urlCategory ?? 'all', urlSearch || undefined)
 
-  // If a filter is active show grid view, else show homepage sections
+  // Sync URL param changes into state (fixes menu links not updating the filter)
+  useEffect(() => { setCategory(urlCategory ?? 'all') }, [urlCategory])
+  useEffect(() => { setSearch(urlSearch) },              [urlSearch])
+
   const isFiltered = category !== 'all' || search.trim().length > 0 || !!urlSearch
 
   return (
@@ -36,7 +39,7 @@ function HomeContent() {
       <TrustBar />
       <CategoryCircles />
 
-      <section ref={gridRef} className="max-w-7xl mx-auto px-4 py-8 space-y-4">
+      <section ref={gridRef} id="products" className="max-w-7xl mx-auto px-4 py-8 space-y-4">
         <SearchBar
           search={search || urlSearch}
           onSearch={setSearch}

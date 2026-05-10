@@ -19,7 +19,7 @@ export const ESTABLISHED   = '1965'
 export const SOCIAL = {
   instagram: 'https://www.instagram.com/nazopticalservice',
   tiktok:    'https://www.tiktok.com/@nazopticalservice.pk',
-  maps:      'https://www.google.com/maps/place/NAZ+OPTICAL+SERVICE+-+TOWNSHIP/@31.455833,74.3157701,17z',
+  maps:      'https://www.google.com/maps/place/NAZ+OPTICAL+SERVICE+-+TOWNSHIP/@31.455833,74.3131952,17z/data=!3m1!4b1!4m6!3m5!1s0x3919074ed9040e57:0x3ab05d251613bc7e!8m2!3d31.455833!4d74.3157701!16s%2Fg%2F11kpf12vjw',
 }
 
 export const LOCATIONS = ['Lahore', 'Shakargarh']

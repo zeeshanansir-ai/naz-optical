@@ -5,11 +5,12 @@ import { motion } from 'framer-motion'
 import { Glasses } from 'lucide-react'
 
 const CATEGORIES = [
-  { label: 'Eyeglasses',       category: 'men',        bg: '#e8f4ea' },
+  { label: 'Men Glasses',      category: 'men',        bg: '#e8f4ea' },
   { label: 'Women Glasses',    category: 'women',      bg: '#fce8f0' },
   { label: 'Kids Glasses',     category: 'kids',       bg: '#e8f0fc' },
   { label: 'Sunglasses',       category: 'sunglasses', bg: '#f5e8c8' },
   { label: 'Computer Glasses', category: 'computer',   bg: '#e8f8f5' },
+  { label: 'Contact Lenses',   category: 'contact',    bg: '#f3e8fc' },
 ]
 
 export function CategoryCircles() {
@@ -27,7 +28,7 @@ export function CategoryCircles() {
               transition={{ delay: i * 0.07 }}
             >
               <Link
-                href={`/?category=${cat.category}`}
+                href={`/?category=${cat.category}#products`}
                 className="flex flex-col items-center gap-3 group"
               >
                 <div

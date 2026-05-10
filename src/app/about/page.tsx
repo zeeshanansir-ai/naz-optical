@@ -56,7 +56,7 @@ export default function AboutPage() {
           <div className="space-y-3 text-sm text-gray-600">
             <a href={SOCIAL.maps} target="_blank" rel="noopener noreferrer" className="flex items-start gap-2 hover:text-red-600 transition-colors">
               <MapPin className="w-4 h-4 mt-0.5 shrink-0" />
-              <span>Township, Lahore &amp; Shakargarh, Punjab, Pakistan</span>
+              <span>Main Haider Road, Township, Lahore &amp; Shakargarh Main Bazaar, Punjab, Pakistan</span>
             </a>
             <a href={`https://wa.me/${WHATSAPP_NUMBER}`} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-green-600 transition-colors">
               <Phone className="w-4 h-4 shrink-0" />
