@@ -48,7 +48,7 @@ export default function TermsPage() {
         <ul className="space-y-4 pl-0">
           <li className="flex gap-3">
             <span className="mt-1.5 w-2 h-2 bg-optical-navy rounded-full shrink-0" />
-            <span><strong>Manufacturer Warranty:</strong> Authentic designer frames are covered under a limited manufacturer's warranty against structural defects. This does not cover accidental damage, scratches, or improper handling by the user.</span>
+            <span><strong>Manufacturer Warranty:</strong> Authentic designer frames are covered under a limited manufacturer&apos;s warranty against structural defects. This does not cover accidental damage, scratches, or improper handling by the user.</span>
           </li>
           <li className="flex gap-3">
             <span className="mt-1.5 w-2 h-2 bg-optical-navy rounded-full shrink-0" />

@@ -38,7 +38,7 @@ export default function PrivacyPolicyPage() {
 
       <section className="space-y-4 text-gray-700 leading-relaxed">
         <h2 className="text-xl font-bold text-gray-900">3. Purpose and Legal Basis for Processing</h2>
-        <p>We process your information under the principle of "Purpose Limitation," ensuring data is only used for the following objectives:</p>
+        <p>We process your information under the principle of &ldquo;Purpose Limitation,&rdquo; ensuring data is only used for the following objectives:</p>
         <ul className="space-y-3 pl-0">
           {[
             { title: 'Order Execution', desc: 'Facilitating the custom manufacturing of prescription lenses and the secure transit of frames from our branches in Township, Lahore, and Shakargarh.' },

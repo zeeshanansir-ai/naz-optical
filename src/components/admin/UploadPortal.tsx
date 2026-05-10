@@ -41,7 +41,6 @@ export function UploadPortal({ editProduct, onSaved, onCancelEdit }: Props) {
   const [success, setSuccess]     = useState(false)
   const [error, setError]         = useState<string | null>(null)
   const [uploading360, set360]    = useState(false)
-  const [uploadingModel, setModel]= useState(false)
 
   // Pre-fill form when editing
   useEffect(() => {
@@ -80,15 +79,6 @@ export function UploadPortal({ editProduct, onSaved, onCancelEdit }: Props) {
     set360(false)
   }
 
-  async function uploadModel(file: File) {
-    setModel(true)
-    const supabase = createClient()
-    const path = `models/${crypto.randomUUID()}_${file.name}`
-    await supabase.storage.from('product-images').upload(path, file, { cacheControl: '3600' })
-    const { data } = supabase.storage.from('product-images').getPublicUrl(path)
-    setForm(f => ({ ...f, model_3d_url: data.publicUrl }))
-    setModel(false)
-  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
