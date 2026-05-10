@@ -4,7 +4,7 @@ const ITEMS = [
   { icon: ShieldCheck, label: 'Premium Quality Products' },
   { icon: Truck,       label: 'Free Delivery In Pakistan' },
   { icon: RefreshCw,   label: '7 Days Exchange or Return' },
-  { icon: Star,        label: '12K+ Reviews',             gold: true },
+  { icon: Star,        label: '5 Star Rated on Google',   gold: true },
 ]
 
 export function TrustBar() {
