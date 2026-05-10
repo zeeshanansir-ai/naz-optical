@@ -22,6 +22,12 @@ export default function AboutPage() {
         <p>
           We also stock <strong>Bella color contact lenses</strong>, Bausch & Lomb, Biomedics, Acuvue, and other contact lens brands — including powered options for vision correction.
         </p>
+        <p>
+          Our branches are located at <strong>Main Haider Road, Township, Lahore</strong> and <strong>Shakargarh Main Bazaar, Punjab</strong>. We offer nationwide delivery across Pakistan and are reachable on WhatsApp at 0300-4686170 or 0327-1830170.
+        </p>
+        <p>
+          All prescription lenses are custom-surfaced to your unique measurements. While we provide high-accuracy refraction tests, these do not replace a full medical consultation with an Ophthalmologist for underlying ocular conditions. Our total liability is limited to the repair or replacement of the specific vision solution purchased.
+        </p>
       </div>
 
       <div className="grid sm:grid-cols-2 gap-6">

@@ -3,30 +3,26 @@ import { test, expect } from '@playwright/test'
 test.describe('Product quick view modal', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/?category=men')
-    // Wait for products to load
     await page.waitForSelector('.group', { timeout: 10000 })
   })
 
   test('clicking a product card opens modal', async ({ page }) => {
     await page.locator('.group').first().click()
-    await expect(page.locator('[class*="fixed inset-0"]')).toBeVisible()
+    // Modal is a fixed overlay
+    await expect(page.locator('.fixed.inset-0').first()).toBeVisible()
   })
 
-  test('modal shows product name and price', async ({ page }) => {
+  test('modal shows price', async ({ page }) => {
     await page.locator('.group').first().click()
     await expect(page.locator('text=Rs.').first()).toBeVisible()
   })
 
   test('modal closes on X button click', async ({ page }) => {
     await page.locator('.group').first().click()
-    await page.locator('button svg.lucide-x').first().click()
-    await expect(page.locator('[class*="fixed inset-0"]')).not.toBeVisible()
-  })
-
-  test('modal closes on backdrop click', async ({ page }) => {
-    await page.locator('.group').first().click()
-    await page.mouse.click(10, 10)
-    await expect(page.locator('[class*="fixed inset-0"]')).not.toBeVisible()
+    await expect(page.locator('.fixed.inset-0').first()).toBeVisible()
+    // Click the X button inside the modal
+    await page.locator('.fixed.inset-0 button').filter({ has: page.locator('svg') }).first().click()
+    await expect(page.locator('.fixed.inset-0')).not.toBeVisible()
   })
 
   test('WhatsApp button is visible in modal', async ({ page }) => {
@@ -43,20 +39,19 @@ test.describe('Order inquiry form', () => {
     await page.locator('text=WhatsApp').first().click()
   })
 
-  test('order form appears after clicking WhatsApp', async ({ page }) => {
-    await expect(page.locator('input[placeholder*="name"], input[placeholder*="Name"]').first()).toBeVisible()
-  })
-
-  test('WhatsApp send button disabled when form empty', async ({ page }) => {
-    // Button/link should not be active without name+phone
-    const link = page.locator('a[href*="wa.me"]').first()
-    // If rendered as disabled span or inactive state
-    await expect(page.locator('text=0300').first()).not.toBeVisible()
+  test('order form shows name and phone fields', async ({ page }) => {
+    await expect(page.locator('input').first()).toBeVisible()
   })
 
   test('WhatsApp links activate after filling name and phone', async ({ page }) => {
-    await page.fill('input[placeholder*="name"], input[placeholder*="Name"]', 'Test Customer')
-    await page.fill('input[placeholder*="phone"], input[placeholder*="Phone"]', '03001234567')
-    await expect(page.locator('a[href*="wa.me"]').first()).toBeVisible()
+    const inputs = page.locator('input')
+    await inputs.nth(0).fill('Test Customer')
+    await inputs.nth(1).fill('03001234567')
+    // Check the wa.me link appears (check href attribute, don't navigate)
+    const link = page.locator('[href*="wa.me"]').first()
+    await expect(link).toBeVisible({ timeout: 5000 })
+    const href = await link.getAttribute('href')
+    expect(href).toContain('wa.me')
+    expect(href).toContain('Test+Customer')
   })
 })

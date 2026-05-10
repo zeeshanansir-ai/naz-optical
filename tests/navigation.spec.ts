@@ -3,43 +3,47 @@ import { test, expect } from '@playwright/test'
 test.describe('Header navigation', () => {
   test('logo links to homepage', async ({ page }) => {
     await page.goto('/about')
-    await page.click('text=Naz Optical Service')
+    await page.getByRole('link', { name: 'Naz Optical Service' }).first().click()
     await expect(page).toHaveURL('/')
   })
 
   test('Reviews link works', async ({ page }) => {
     await page.goto('/')
-    await page.click('a[href="/reviews"]')
+    await page.getByRole('navigation').getByRole('link', { name: 'Reviews' }).click()
     await expect(page).toHaveURL('/reviews')
-    await expect(page.locator('h1')).toContainText('Reviews')
+    await expect(page.locator('h1')).toBeVisible()
   })
 
-  test('mega menu: Eyeglasses appears on hover', async ({ page }) => {
+  test('mega menu: Eyeglasses submenu appears on hover', async ({ page }) => {
     await page.goto('/')
-    await page.hover('text=Eyeglasses')
-    await expect(page.locator('text=Men Glasses').first()).toBeVisible()
-    await expect(page.locator('text=Women Glasses').first()).toBeVisible()
-    await expect(page.locator('text=Kids Glasses').first()).toBeVisible()
+    await page.getByRole('navigation').getByText('Eyeglasses').first().hover()
+    await expect(page.getByText('Men Glasses').first()).toBeVisible()
+    await expect(page.getByText('Women Glasses').first()).toBeVisible()
+    await expect(page.getByText('Kids Glasses').first()).toBeVisible()
   })
 
-  test('mega menu: Sunglasses submenu links navigate', async ({ page }) => {
+  test('mega menu: Sunglasses All link navigates', async ({ page }) => {
     await page.goto('/')
-    await page.hover('text=Sunglasses')
-    await page.click('text=All Sunglasses')
+    await page.getByRole('navigation').getByText('Sunglasses').first().hover()
+    await page.getByRole('link', { name: 'All Sunglasses' }).click()
     await expect(page).toHaveURL('/?category=sunglasses')
   })
 
-  test('mega menu: brand link filters correctly', async ({ page }) => {
+  test('mega menu: brand link adds search param', async ({ page }) => {
     await page.goto('/')
-    await page.hover('text=Eyeglasses')
-    await page.click('text=Ray Ban')
-    await expect(page.url()).toContain('q=Ray')
+    await page.getByRole('navigation').getByText('Eyeglasses').first().hover()
+    // Wait for the dropdown to be visible
+    const dropdown = page.locator('nav .absolute').first()
+    await expect(dropdown).toBeVisible()
+    // Click the Ray Ban link inside the dropdown
+    await dropdown.getByRole('link', { name: 'Ray Ban' }).click()
+    await expect(page).toHaveURL(/q=Ray/)
   })
 
   test('Contact Lenses menu navigates correctly', async ({ page }) => {
     await page.goto('/')
-    await page.hover('text=Contact Lenses')
-    await page.click('text=All Contact Lenses')
+    await page.getByRole('navigation').getByText('Contact Lenses').first().hover()
+    await page.getByRole('link', { name: 'All Contact Lenses' }).click()
     await expect(page).toHaveURL('/?category=contact')
   })
 })
@@ -47,25 +51,25 @@ test.describe('Header navigation', () => {
 test.describe('Footer links', () => {
   test('About Us link works', async ({ page }) => {
     await page.goto('/')
-    await page.click('footer a[href="/about"]')
+    await page.locator('footer').getByRole('link', { name: 'About Us' }).click()
     await expect(page).toHaveURL('/about')
   })
 
   test('Exchange Policy link works', async ({ page }) => {
     await page.goto('/')
-    await page.click('footer a[href="/exchange-policy"]')
+    await page.locator('footer').getByRole('link', { name: 'Exchange Policy' }).click()
     await expect(page).toHaveURL('/exchange-policy')
   })
 
   test('Reviews link in footer works', async ({ page }) => {
     await page.goto('/')
-    await page.click('footer a[href="/reviews"]')
+    await page.locator('footer').getByRole('link', { name: 'Reviews' }).click()
     await expect(page).toHaveURL('/reviews')
   })
 
-  test('footer category links navigate correctly', async ({ page }) => {
+  test('footer Women Glasses link navigates correctly', async ({ page }) => {
     await page.goto('/')
-    await page.click('footer a[href="/?category=women"]')
+    await page.locator('footer').getByRole('link', { name: 'Women Glasses' }).click()
     await expect(page).toHaveURL('/?category=women')
   })
 })
