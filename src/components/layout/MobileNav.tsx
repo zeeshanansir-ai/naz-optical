@@ -29,6 +29,20 @@ export function MobileNav() {
               {c.label}
             </Link>
           ))}
+          <Link
+            href="/reviews"
+            onClick={() => setOpen(false)}
+            className="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-optical-gold/10 hover:text-optical-gold transition-colors"
+          >
+            Reviews
+          </Link>
+          <Link
+            href="/blog"
+            onClick={() => setOpen(false)}
+            className="flex items-center px-3 py-2.5 rounded-lg text-sm font-medium hover:bg-optical-gold/10 hover:text-optical-gold transition-colors"
+          >
+            Blog
+          </Link>
         </nav>
       </SheetContent>
     </Sheet>

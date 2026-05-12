@@ -180,6 +180,9 @@ export function MegaMenu({ active, onEnter, onLeave }: Props) {
       <Link href="/reviews" className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-red-600 transition-colors border-b-2 border-transparent">
         Reviews
       </Link>
+      <Link href="/blog" className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-red-600 transition-colors border-b-2 border-transparent">
+        Blog
+      </Link>
     </nav>
   )
 }

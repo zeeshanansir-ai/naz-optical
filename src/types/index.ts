@@ -24,6 +24,18 @@ export interface QuickViewState {
   product: Product | null
 }
 
+export interface BlogPost {
+  id: string
+  title: string
+  slug: string
+  excerpt: string | null
+  content: string
+  cover_image_url: string | null
+  is_published: boolean
+  created_at: string
+  updated_at: string
+}
+
 export interface Review {
   id: string
   reviewer_name: string

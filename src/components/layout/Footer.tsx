@@ -19,6 +19,7 @@ const LINKS: Record<string, { label: string; href: string; external?: boolean }[
   'Help': [
     { label: 'About Us',        href: '/about'           },
     { label: 'Reviews',         href: '/reviews'         },
+    { label: 'Blog',            href: '/blog'            },
     { label: 'Exchange Policy', href: '/exchange-policy' },
     { label: 'WhatsApp Us',     href: `https://wa.me/${WHATSAPP_NUMBER}`, external: true },
   ],
