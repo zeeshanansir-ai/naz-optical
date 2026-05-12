@@ -210,7 +210,7 @@ export function BlogManager() {
 
       {/* Posts list */}
       {posts.length === 0 ? (
-        <p className="text-sm text-gray-400 text-center py-8">No blog posts yet. Click "New Post" to get started.</p>
+        <p className="text-sm text-gray-400 text-center py-8">No blog posts yet. Click New Post to get started.</p>
       ) : (
         <ul className="space-y-3">
           {posts.map(post => (
