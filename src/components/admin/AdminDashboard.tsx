@@ -4,9 +4,10 @@ import { useState, useRef } from 'react'
 import { UploadPortal } from './UploadPortal'
 import { ProductList } from './ProductList'
 import { BlogManager } from './BlogManager'
+import { FAQManager } from './FAQManager'
 import { Product } from '@/types'
 
-type Tab = 'products' | 'blog'
+type Tab = 'products' | 'blog' | 'faq'
 
 export function AdminDashboard() {
   const [tab, setTab]              = useState<Tab>('products')
@@ -35,22 +36,26 @@ export function AdminDashboard() {
         {/* Header */}
         <div>
           <h1 className="text-2xl font-bold text-optical-navy">Admin Portal</h1>
-          <p className="text-muted-foreground text-sm mt-1">Manage your products and blog.</p>
+          <p className="text-muted-foreground text-sm mt-1">Manage your products, blog, and FAQs.</p>
         </div>
 
         {/* Tabs */}
         <div className="flex gap-1 bg-white border border-gray-200 rounded-xl p-1 w-fit">
-          {(['products', 'blog'] as Tab[]).map(t => (
+          {([
+            ['products', '🛍️ Products'],
+            ['blog',     '📝 Blog'],
+            ['faq',      '❓ FAQ'],
+          ] as [Tab, string][]).map(([t, label]) => (
             <button
               key={t}
               onClick={() => setTab(t)}
-              className={`px-5 py-2 text-sm font-semibold rounded-lg transition-colors capitalize ${
+              className={`px-5 py-2 text-sm font-semibold rounded-lg transition-colors ${
                 tab === t
                   ? 'bg-optical-navy text-white shadow-sm'
                   : 'text-gray-500 hover:text-gray-800'
               }`}
             >
-              {t === 'products' ? '🛍️ Products' : '📝 Blog'}
+              {label}
             </button>
           ))}
         </div>
@@ -79,6 +84,12 @@ export function AdminDashboard() {
         {tab === 'blog' && (
           <div className="bg-white rounded-2xl shadow-sm border p-6">
             <BlogManager />
+          </div>
+        )}
+
+        {tab === 'faq' && (
+          <div className="bg-white rounded-2xl shadow-sm border p-6">
+            <FAQManager />
           </div>
         )}
 
