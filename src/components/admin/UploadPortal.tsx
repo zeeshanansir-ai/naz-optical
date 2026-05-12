@@ -22,11 +22,12 @@ interface FormState {
   storage_path:   string
   images_360:     string[]
   model_3d_url:   string
+  description:    string
 }
 
 const INIT: FormState = {
   name: '', category: '', brand: '', price: '', original_price: '',
-  badge: '', image_url: '', storage_path: '', images_360: [], model_3d_url: '',
+  badge: '', image_url: '', storage_path: '', images_360: [], model_3d_url: '', description: '',
 }
 
 interface Props {
@@ -56,6 +57,7 @@ export function UploadPortal({ editProduct, onSaved, onCancelEdit }: Props) {
         storage_path:   editProduct.storage_path,
         images_360:     editProduct.images_360 ?? [],
         model_3d_url:   editProduct.model_3d_url ?? '',
+        description:    editProduct.description ?? '',
       })
       setSuccess(false)
       setError(null)
@@ -190,6 +192,19 @@ export function UploadPortal({ editProduct, onSaved, onCancelEdit }: Props) {
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      {/* Description */}
+      <div className="space-y-1.5">
+        <Label htmlFor="description">Product Description <span className="text-xs font-normal text-gray-400">(for SEO — use keywords like brand, frame type, lens colour)</span></Label>
+        <textarea
+          id="description"
+          rows={5}
+          placeholder="e.g. The Ray-Ban Classic Aviator features lightweight metal frames with UV400 green lenses, ideal for everyday wear. Available at Naz Optical, Rawalpindi. Order online with home delivery across Pakistan."
+          value={form.description}
+          onChange={e => setForm(f => ({ ...f, description: e.target.value }))}
+          className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring resize-vertical"
+        />
       </div>
 
       {/* 360° images */}

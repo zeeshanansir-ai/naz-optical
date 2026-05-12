@@ -4,7 +4,7 @@ import { createAdminClient } from '@/lib/supabase/admin'
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   const admin = createAdminClient()
   const body  = await req.json()
-  const { name, category, brand, price, original_price, badge, image_url, storage_path, images_360, model_3d_url } = body
+  const { name, category, brand, price, original_price, badge, image_url, storage_path, images_360, model_3d_url, description } = body
 
   const { error } = await admin.from('products').update({
     name,
@@ -17,6 +17,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     storage_path,
     images_360:     images_360?.length > 0 ? images_360 : null,
     model_3d_url:   model_3d_url || null,
+    description:    description || null,
   }).eq('id', params.id)
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })

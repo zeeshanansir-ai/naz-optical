@@ -14,6 +14,7 @@ export interface Product {
   badge: 'new' | 'premium' | 'sale' | null
   images_360: string[] | null   // ordered array of URLs for 360° spinner
   model_3d_url: string | null   // .glb URL for virtual try-on
+  description: string | null
   is_active: boolean
   created_at: string
 }
