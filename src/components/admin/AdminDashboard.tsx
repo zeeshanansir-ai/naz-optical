@@ -5,9 +5,10 @@ import { UploadPortal } from './UploadPortal'
 import { ProductList } from './ProductList'
 import { BlogManager } from './BlogManager'
 import { FAQManager } from './FAQManager'
+import { ChatSupport } from './ChatSupport'
 import { Product } from '@/types'
 
-type Tab = 'products' | 'blog' | 'faq'
+type Tab = 'products' | 'blog' | 'faq' | 'chat'
 
 export function AdminDashboard() {
   const [tab, setTab]              = useState<Tab>('products')
@@ -45,6 +46,7 @@ export function AdminDashboard() {
             ['products', '🛍️ Products'],
             ['blog',     '📝 Blog'],
             ['faq',      '❓ FAQ'],
+            ['chat',     '💬 Chat'],
           ] as [Tab, string][]).map(([t, label]) => (
             <button
               key={t}
@@ -90,6 +92,13 @@ export function AdminDashboard() {
         {tab === 'faq' && (
           <div className="bg-white rounded-2xl shadow-sm border p-6">
             <FAQManager />
+          </div>
+        )}
+
+        {tab === 'chat' && (
+          <div className="bg-white rounded-2xl shadow-sm border p-6">
+            <h2 className="text-base font-semibold text-gray-800 mb-4">Live Chat Support</h2>
+            <ChatSupport />
           </div>
         )}
 
