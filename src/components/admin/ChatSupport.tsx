@@ -70,9 +70,12 @@ export function ChatSupport() {
   async function sendReply() {
     if (!reply.trim() || !active) return
     setSending(true)
-    const supabase = createClient()
-    await supabase.from('chat_messages').insert({ session_id: active.id, sender: 'admin', message: reply.trim() })
+    const msg = reply.trim()
     setReply('')
+    const tempMsg: Message = { id: crypto.randomUUID(), sender: 'admin', message: msg, created_at: new Date().toISOString() }
+    setMessages(prev => [...prev, tempMsg])
+    const supabase = createClient()
+    await supabase.from('chat_messages').insert({ session_id: active.id, sender: 'admin', message: msg })
     setSending(false)
   }
 

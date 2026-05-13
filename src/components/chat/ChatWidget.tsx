@@ -64,17 +64,22 @@ export function ChatWidget() {
       setSessionId(data.id)
       setStep('chat')
       localStorage.setItem('naz_chat_session', JSON.stringify({ id: data.id, name: name.trim() }))
-      // Send a greeting
-      await supabase.from('chat_messages').insert({ session_id: data.id, sender: 'admin', message: `Hi ${name.trim()}! 👋 Welcome to Naz Optical. How can we help you today?` })
+      const greet = `Hi ${name.trim()}! 👋 Welcome to Naz Optical. How can we help you today?`
+      await supabase.from('chat_messages').insert({ session_id: data.id, sender: 'admin', message: greet })
+      setMessages([{ id: crypto.randomUUID(), sender: 'admin', message: greet, created_at: new Date().toISOString() }])
     }
   }
 
   async function sendMessage() {
     if (!text.trim() || !sessionId) return
     setSending(true)
-    const supabase = createClient()
-    await supabase.from('chat_messages').insert({ session_id: sessionId, sender: 'visitor', message: text.trim() })
+    const msg = text.trim()
     setText('')
+    // Optimistic update — show immediately without waiting for Realtime
+    const tempMsg: Message = { id: crypto.randomUUID(), sender: 'visitor', message: msg, created_at: new Date().toISOString() }
+    setMessages(prev => [...prev, tempMsg])
+    const supabase = createClient()
+    await supabase.from('chat_messages').insert({ session_id: sessionId, sender: 'visitor', message: msg })
     setSending(false)
   }
 
